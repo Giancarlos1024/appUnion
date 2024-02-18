@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subir PDF</title>
+</head>
+<body>
+    <h1>Subir PDF</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="pdfInput" name="pdfInput" accept=".pdf" multiple>
+        <button type="submit">Subir PDF</button>
+    </form>
+
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData();
+            const files = document.getElementById('pdfInput').files;
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append('pdfFiles', files[i]);
+            }
+
+            try {
+                const response = await fetch('/upload', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    console.log('PDF(s) subido(s) exitosamente');
+                } else {
+                    console.error('Error al subir el PDF(s)');
+                }
+            } catch (error) {
+                console.error('Error de red:', error);
+            }
+        });
+    </script>
+</body>
+</html>
